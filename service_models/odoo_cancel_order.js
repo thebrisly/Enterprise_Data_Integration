@@ -1,12 +1,11 @@
-// la fonction require stipule que le script nécessite le npm 'odoo-xmlrpc' pour fonctionner //
 var Odoo = require('odoo-xmlrpc');
 
 var odoo = new Odoo({
-    url: 'http://edu-heclausanne-PLANET.odoo.com/xmlrpc/2/common',
+    url: 'http://edu-heclausanne-mars.odoo.com/xmlrpc/2/common',
     port: 80,
     db: 'edu-heclausanne-mars',
-    username: 'mars@odoo.com',
-    password: '12m@r$34UNIL'
+    username: 'melvin.petracca@unil.ch',
+    password: 'nR9m.55g?$5uHi6'
 });
 
 
@@ -14,7 +13,7 @@ var id = odoo.connect(function (err) {
     if (err) { return console.log(err); }
     console.log('Connected to Odoo server.');
 
-    var order_name = 'S00003'
+    var order_name = 'S00014'
 
     var inParams = [];
     inParams.push([['name', '=', order_name]]); //conditions de recherche
