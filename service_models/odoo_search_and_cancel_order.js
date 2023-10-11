@@ -4,9 +4,9 @@ var Odoo = require('odoo-xmlrpc');
 var odoo = new Odoo({
     url: 'http://edu-heclausanne-PLANET.odoo.com/xmlrpc/2/common',
     port: 80,
-    db: 'edu-heclausanne-PLANET',
-    username: 'admin_user@odoo.com',
-    password: 'password'
+    db: 'edu-heclausanne-mars',
+    username: 'mars@odoo.com',
+    password: '12m@r$34UNIL'
 });
 
 
