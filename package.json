@@ -1,0 +1,17 @@
+{
+  "name": "enterprise_data_integration",
+  "version": "1.0.0",
+  "description": "Repo for the Enterprise Data &amp; Integration course in the university of Lausanne.",
+  "main": "hello.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "odoo-xmlrpc": "^1.0.8",
+    "readline": "^1.3.0",
+    "xml2js": "^0.6.2"
+  }
+}
