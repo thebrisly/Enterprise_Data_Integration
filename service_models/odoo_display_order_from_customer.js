@@ -1,5 +1,5 @@
 //* Find the orders of a given customer */
-
+hello arthur
 // la fonction require stipule que le script nécessite le npm 'odoo-xmlrpc' pour fonctionner //
 
 const Odoo = require('odoo-xmlrpc');
@@ -22,7 +22,7 @@ prompt.get(['NomDuPartner'], (err, answer) => {
   if (err) { return console.log(err); }
 
   // connexion à la database //
-  
+
   odoo.connect( (err) => {
       if (err) { return console.log(err); } // retourne message d'erreur si erreur
 
