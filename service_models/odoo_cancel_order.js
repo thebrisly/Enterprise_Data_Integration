@@ -8,28 +8,57 @@ var odoo = new Odoo({
     password: 'nR9m.55g?$5uHi6'
 });
 
+var order_name = 'S00020'; // Numéro de commande à annuler
 
-var id = odoo.connect(function (err) {
-    if (err) { return console.log(err); }
+odoo.connect(function (err) {
+    if (err) {
+        return console.log(err);
+    }
     console.log('Connected to Odoo server.');
 
-    var order_name = 'S00014'
-
+    // Recherche de la commande par son nom
     var inParams = [];
-    inParams.push([['name', '=', order_name]]); //conditions de recherche
+    inParams.push([['name', '=', order_name]]);
 
-    // Execution de la méthode 'search' sur la table sale.order, selon la condition inParams, à savoir [name = 'SO003']. Retourne l'id de la commande SO003 //
-    odoo.execute_kw('sale.order', 'search', [inParams], function (err, value) {
-        if (err) { return console.log(err); }
-        else{
-          // Execution de la méthode 'action_cancel sur la table sale.order, selon le paramètre [value], à savoir l'id de la commande SO003. //
-          odoo.execute_kw('sale.order', 'action_cancel', [ value ], function (err2, value2) {
-                 if (err2) { return console.log(err2); }
-                 else{
-                   console.log('Le devis ' + order_name + ' a correctement été annulé.');
-                 }
-          });
+    // Exécution de la méthode 'search' sur la commande
+    odoo.execute_kw('sale.order', 'search', [inParams], function (err, orderIds) {
+        if (err) {
+            return console.log(err);
         }
 
+        if (orderIds.length === 0) {
+            console.log('Aucune commande trouvée avec le nom ' + order_name);
+            return;
+        }
+
+        var orderId = orderIds[0]; // Prend le premier ID trouvé
+
+        // Vérification que la commande existe
+        odoo.execute_kw('sale.order', 'search_read', [[['id', '=', orderId]]], function (err, orders) {
+            if (err) {
+                return console.log(err);
+            }
+
+            if (orders.length === 0) {
+                console.log('La commande ' + order_name + ' n\'existe pas.');
+                return;
+            }
+
+            // Pop up de la fenêtre d'annulation
+            odoo.execute_kw('sale.order', 'action_cancel', [[orderId]], function (err, result) {
+                if (err) {
+                    return console.log(err);
+                }
+
+                // Annuler vraiment la commande.
+                odoo.execute_kw('sale.order.cancel', 'action_cancel', [orderId], function (err, result) {
+                    if (err) {
+                        return console.log(err);
+                    }
+
+                    console.log('La commande ' + order_name + ' a été annulée avec succès et un e-mail a été envoyé.');
+                });
+            });
+        });
     });
 });

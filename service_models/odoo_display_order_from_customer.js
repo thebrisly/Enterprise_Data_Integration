@@ -1,5 +1,4 @@
 //* Find the orders of a given customer */
-hello arthur
 // la fonction require stipule que le script nécessite le npm 'odoo-xmlrpc' pour fonctionner //
 
 const Odoo = require('odoo-xmlrpc');
