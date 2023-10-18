@@ -14,21 +14,31 @@ function parseLeTruc(){
 
       parser.parseString(data, function (err, result) {
         console.log('Task 1: shows the whole xml document:')
-        console.dir(result, {depth : 5}); //
+        console.dir(result, {depth : 5}); // the result is the tree where the root is "result"
 
         console.log('Task 2:shows only the second element in the xml file:')
         extractedData = result.breakfast_menu.food[1];
         console.dir(extractedData);
 
         console.log('Task 3: find total of all prices:')
-        var this_sum = 0, this_price = 0;
+        var this_sum_pr = 0, this_price = 0;
         var f = result.breakfast_menu.food;
         for(var k=0; k < f.length; k++){          // for each element in f
             this_price = f[k].price[0].slice(1);    //slice(1) is for removing the "$" sign
-            this_sum = this_sum + Number(this_price);
+            this_sum_pr = this_sum_pr + Number(this_price);
         }
+
+        console.log('Task 4: find total of calories:')
+        var this_sum_cal = 0, this_cal = 0;
+        var f = result.breakfast_menu.food;
+        for(var k=0; k < f.length; k++){          // for each element in f
+            this_cal = f[k].calories[0];    //slice(1) is for removing the "$" sign
+            this_sum_cal = this_sum_cal + Number(this_cal);
+        }
+        
         //total price is shown below
-        console.log('total price:', this_sum.toFixed(2));
+        console.log('total price:', this_sum_pr.toFixed(2));
+        console.log('total calories:', this_sum_cal.toFixed(2));
       });
 
   });
