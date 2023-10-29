@@ -32,10 +32,10 @@ function parseLeTruc(){
         var this_sum_cal = 0, this_cal = 0;
         var f = result.breakfast_menu.food;
         for(var k=0; k < f.length; k++){          // for each element in f
-            this_cal = f[k].calories[0];    //slice(1) is for removing the "$" sign
+            this_cal = f[k].calories[0];
             this_sum_cal = this_sum_cal + Number(this_cal);
         }
-        
+
         //total price is shown below
         console.log('total price:', this_sum_pr.toFixed(2));
         console.log('total calories:', this_sum_cal.toFixed(2));

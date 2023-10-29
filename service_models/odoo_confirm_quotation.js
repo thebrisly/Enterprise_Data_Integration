@@ -41,7 +41,7 @@ var id = odoo.connect(function (err) // connection to the odoo server and indica
         // if an error occurs when executing the method, this error will be captured in err2, otherwise, the result of the method (if any) will be stored in value2
         odoo.execute_kw('sale.order', 'action_confirm', [[orderId]], function (err2, value2) 
         {
-            if (err2) { return console.log(err2); } // if an error is detected during execution of the method, the code displays a message error
+            if (err2) { return console.log(err2); } // if an error is detected during execution of the method, the code displays a message error (the one stocked in err)
             console.log('The quotation ' + order_name + ' has been confirmed with success.'); // message error that will be displayed
         });
     });

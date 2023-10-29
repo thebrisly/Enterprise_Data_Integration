@@ -1,10 +1,9 @@
-//* Find the orders of a given customer */
-// la fonction require stipule que le script nécessite le npm 'odoo-xmlrpc' pour fonctionner //
-
+// importing the odoo-smlrpc module that is mandatory in order to make requests and interact with the Odoo server
 const Odoo = require('odoo-xmlrpc');
+// also importing the prompt module to interact with the person searching for an information
 const prompt = require('prompt');
 
-// informations requises pour se connecter à la database //
+// the 7 lines below contain the information for our group (MARS) to connect to our Odoo server
 const odoo = new Odoo({
     url: 'http://edu-heclausanne-mars.odoo.com/xmlrpc/2/common',
     port: 80,
@@ -13,43 +12,46 @@ const odoo = new Odoo({
     password: 'nR9m.55g?$5uHi6'
 });
 
-/* la fonction prompt.start() débute l'usage du module prompt */
+// the prompt.start() function starts using the prompt module 
 prompt.start();
 
-// permet à l'utilisateur d'entrer le nom d'un client. Ce nom sera ensuite utilisé dans les conditions du search_read  //
-prompt.get(['NomDuPartner'], (err, answer) => {
-  if (err) { return console.log(err); }
+// allows the user to enter the name of a customer. This name will then be used in search_read conditions
+prompt.get(['NomDuPartner'], (err, answer) => 
+{
+  if (err) { return console.log(err); } // if something doesn't work
 
-  // connexion à la database //
+  odoo.connect( (err) => //connexion to the database
+  {
+      if (err) { return console.log(err); } // return an error message if connexion fails
 
-  odoo.connect( (err) => {
-      if (err) { return console.log(err); } // retourne message d'erreur si erreur
+      let partner_name = answer.NomDuPartner; // creating the variable where we stock the answer given by the user
+      let inParams = []; // this variable will be used to store parameters to be passed to a subsequent method :   
+      inParams.push([ ['name', 'like', partner_name] ]);  // we indicate the partner name that we want to search
 
-      let partner_name = answer.NomDuPartner; // crée la variable partner_name
-      let inParams = [];
-      inParams.push([ ['name', 'like', partner_name] ]);  // insère la condition [name = 'Axelor'] dans l'array inParams
+      // executing the method "search" on the table "sale.order" and will apply all the conditions found in inParams
+       // if an error occurs when executing the method, this error will be captured in err, otherwise, the result of the method (if any) will be stored in p_id
+      odoo.execute_kw('res.partner', 'search',[ inParams ], (err, p_id) => 
+      {
+            if (err) { return console.log(err); } // if the method fails then it will return automaticaly an error (err)
 
-  // Execution de la méthode 'search' sur la classe res.partner, selon les paramètres de inParams, à savoir [name = 'Axelor']. Retourne l'id de Axelor (p_id) //
-      odoo.execute_kw('res.partner', 'search',[ inParams ], (err, p_id) => {
-            if (err) { return console.log(err); } // Retourne un message d'erreur en cas d'erreur
-
-            if (!p_id || p_id.length === 0) 
+            if (!p_id || p_id.length === 0)  // in the case of an empty array or no value in p_id it will return an error 
             {
-                console.log("Ce partenaire n'existe pas."); //Retourne ce message s'il ne trouve aucun partenaire correspondant à l'input
+                console.log("This partner doesn't exist."); // Returns this message if it finds no partner corresponding to the input
                 return;
             }
 
-          console.log(partner_name, ' est le numero: ', p_id);
+          console.log(partner_name, ' is number: ', p_id); // displays the p_id of the partner given previously
 
-          // Execution de la méthode 'search_read' sur la classe sale.order, selon la condition et les attributs précisés dans inParams//
-          console.log('Liste de ses devis:')
-          inParams = [];
+          console.log('Quotation list:') // displays this line
+          inParams = []; // this variable will be used to store parameters to be passed to the next function :  
           inParams.push([ ['partner_id', '=', p_id ] ]);
-          inParams.push(['name', 'state', 'amount_untaxed']); // précise les attributs (fields) que l'on souhaite retrouver
+          inParams.push(['name', 'state', 'amount_untaxed']); // specify the attributes (fields) to be retrieved
           
-          odoo.execute_kw('sale.order','search_read',[ inParams ],(err, orders) => {
-              if (err) { return console.log(err); } // retourne message d'erreur si erreur
-              return console.dir(orders);                  // sinon, affiche le résultat (variable orders)
+          // Execution of the 'search_read' method on the sale.order class, according to the condition and attributes specified in inParams//
+          odoo.execute_kw('sale.order','search_read',[ inParams ],(err, orders) => 
+          {
+              if (err) { return console.log(err); } // returns an error message if the method fails
+              return console.dir(orders); // otherwise it will display the variables linked to the different orders of the partner
           });
 
         });

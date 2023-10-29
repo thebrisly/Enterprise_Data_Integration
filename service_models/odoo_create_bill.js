@@ -1,7 +1,7 @@
 var Odoo = require('odoo-xmlrpc');
 
 var odoo = new Odoo({
-    url: 'http://edu-heclausanne-mars.odoo.com/xmlrpc/2/common',
+    url: 'http://edu-heclausanne-mars.odoo.com/xmlrpc/2',
     port: 80,
     db: 'edu-heclausanne-mars',
     username: 'melvin.petracca@unil.ch',
@@ -42,20 +42,25 @@ odoo.connect(function (err) {
 
                 console.log('Action "Créer une facture" déclenchée avec succès pour la commande ' + order_name);
 
-                // Maintenant, on créé la facture de paiement d'avance à partir du modèle sale.advance.payment.inv
-                var invoiceValues = {
-                    //'amount': 100.0, // Remplacez par le montant approprié
-                    //'sale_order_ids': [[6, false, [order_id]]],
-                    // Ajoutez d'autres champs de facture au besoin
+                // Créer la facture directement à partir de la commande
+                var wizardData = {
+                    'sale_order_ids': [[6, false, [order_id]]]
                 };
 
-                odoo.execute_kw('sale.advance.payment.inv', 'create_invoices', [[invoiceValues]], function (err, invoiceId) {
+                odoo.execute_kw('sale.advance.payment.inv', 'create', [wizardData], function (err, wizardId) {
                     if (err) {
                         return console.log(err);
                     }
 
-                    console.log('Facture de paiement d\'avance créée avec succès, ID de la facture : ' + invoiceId);
-                    odoo.close();
+                    // Appeler create_invoices avec l'ID du wizard
+                    odoo.execute_kw('sale.advance.payment.inv', 'create_invoices', [[wizardId]], function (err, invoiceId) {
+                        if (err) {
+                            return console.log(err);
+                        }
+
+                        console.log('Facture créée avec succès, ID de la facture : ' + invoiceId);
+                        odoo.close();
+                    });
                 });
             });
         }
