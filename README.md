@@ -20,4 +20,8 @@ As part of the course requirements, I had the opportunity to work on a project w
 ### Platform Development
 For the project, I developed a data platform tailored to the needs of a fictitious user. Leveraging ODoo's API capabilities, I designed and implemented a solution to integrate data from various sources and systems into a unified platform with Node-Red. This platform aimed to streamline data management processes, enhance decision-making capabilities, and improve overall business operations.
 
+<div align="center">
+<img width="400" alt="Capture d’écran 2024-03-28 à 08 47 09" src="https://github.com/thebrisly/Enterprise_Data_Integration/assets/84352348/5f56e93d-0afa-44db-8bc6-95b116774fd7">
+</div>
+
 Thank you for exploring my repository. Please feel free to reach out if you have any questions or would like to learn more about my project work during the course!
